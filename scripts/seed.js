@@ -26,9 +26,33 @@ const seedDB = async () => {
       ];
       await Employee.insertMany(employees);
       console.log('Employees seeded');
+
+      // Seed Projects
+    const projects = [
+        { project_code: 'P001', project_name: 'Website Redesign', project_description: 'Redesign company website' },
+        { project_code: 'P002', project_name: 'Mobile App', project_description: 'Develop mobile application' },
+        { project_code: 'P003', project_name: 'Database Migration', project_description: 'Migrate to new DB' },
+        { project_code: 'P004', project_name: 'API Integration', project_description: 'Integrate third-party APIs' },
+        { project_code: 'P005', project_name: 'Security Audit', project_description: 'Conduct security audit' }
+      ];
+      await Project.insertMany(projects);
+      console.log('Projects seeded');
+
+      // Seed Project Assignments
+    const assignments = [
+        { employee_id: 'E001', project_code: 'P001', start_date: new Date('2025-01-01') },
+        { employee_id: 'E002', project_code: 'P002', start_date: new Date('2025-02-01') },
+        { employee_id: 'E003', project_code: 'P003', start_date: new Date('2025-03-01') },
+        { employee_id: 'E004', project_code: 'P004', start_date: new Date('2025-04-01') },
+        { employee_id: 'E005', project_code: 'P005', start_date: new Date('2025-05-01') }
+      ];
+      await ProjectAssignment.insertMany(assignments);
+      console.log('Project Assignments seeded');
+
     } catch (err) {
     console.error('Error seeding database:', err);
     } finally {
     mongoose.connection.close();
     }
 };
+seedDB()
