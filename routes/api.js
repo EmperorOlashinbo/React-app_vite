@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Employee = require('../models/Employee');
+const Project = require('../models/Project');
 
 // POST /api/employees - Add new employee
 router.post('/employees', async (req, res) => {
@@ -38,4 +39,46 @@ router.get('/employees/:employee_id', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+// PUT /api/employees/:employee_id - Update employee by employee_id
+router.put('/employees/:employee_id', async (req, res) => {
+  try {
+    const { employee_id } = req.params;
+    const { full_name, email, hashed_password } = req.body;
+    const employee = await Employee.findByIdAndUpdate(employee_id, { full_name, email, hashed_password }, { new: true });
+    if (!employee) {
+      return res.status(404).json({ error: `Employee with employee_id ${employee_id} not found` });
+    }
+    res.json(employee);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+// DELETE /api/employees/:employee_id - Delete employee by employee_id
+router.delete('/employees/:employee_id', async (req, res) => {
+  try {
+    const { employee_id } = req.params;
+    const employee = await Employee.findByIdAndDelete(employee_id);
+    if (!employee) {
+      return res.status(404).json({ error: `Employee with employee_id ${employee_id} not found` });
+    }
+    res.json({ message: `Employee with employee_id ${employee_id} deleted` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+// POST /api/projects - Add new project
+router.post('/projects', async (req, res) => {
+    try {
+      const { project_code, project_name, project_description } = req.body;
+      const existingProject = await Project.findOne({ project_code });
+      if (existingProject) {
+        return res.status(400).json({ error: `Project with project_code ${project_code} already exists` });
+      }
+      const project = new Project({ project_code, project_name, project_description });
+      await project.save();
+      res.status(201).json(project);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
 });
