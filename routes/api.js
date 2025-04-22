@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Employee = require('../models/Employee');
 const Project = require('../models/Project');
+const ProjectAssignment = require('../models/ProjectAssignment');
 
 // POST /api/employees - Add new employee
 router.post('/employees', async (req, res) => {
@@ -131,4 +132,27 @@ router.delete('/projects/:project_code', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// POST /api/project-assignments - Assign employee to project
+router.post('/project-assignments', async (req, res) => {
+    try {
+      const { employee_id, project_code, start_date } = req.body;
+  
+      const employee = await Employee.findOne({ employee_id });
+      if (!employee) {
+        return res.status(400).json({ error: `Employee with employee_id ${employee_id} not found` });
+      }
+  
+      const project = await Project.findOne({ project_code });
+      if (!project) {
+        return res.status(400).json({ error: `Project with project_code ${project_code} not found` });
+      }
+  
+      const assignment = new ProjectAssignment({ employee_id, project_code, start_date });
+      await assignment.save();
+      res.status(201).json(assignment);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
 });
