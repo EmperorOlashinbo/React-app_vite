@@ -23,3 +23,22 @@ let server;
 server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 })
+// Function to handle graceful shutdown of the server and database connection
+function shutdown() {
+    console.log('Shutting down server...');
+    server.close(async () => { // Close the HTTP server
+      console.log('HTTP server closed.');
+      try {
+        await mongoose.connection.close(); // Close the MongoDB connection
+        console.log('MongoDB connection closed.');
+        process.exit(0); // Exit the process with success code
+      } catch (error) {
+        console.error('Error closing MongoDB connection:', error); // Log any errors during shutdown
+        process.exit(1); // Exit the process with error code
+      }
+    });
+  }
+  
+  // Handle termination signals (e.g., Ctrl+C or system termination)
+  process.on('SIGINT', shutdown); // Handle Ctrl+C
+  process.on('SIGTERM', shutdown); // Handle termination signals from the system
