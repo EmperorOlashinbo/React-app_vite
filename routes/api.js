@@ -82,3 +82,53 @@ router.post('/projects', async (req, res) => {
       res.status(400).json({ error: err.message });
     }
 });
+
+// GET /api/projects - List all projects
+router.get('/projects', async (req, res) => {
+    try {
+      const projects = await Project.find();
+      res.json(projects);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+});
+// GET /api/projects/:project_code - Get project by project_code
+router.get('/projects/:project_code', async (req, res) => {
+  try {
+    const { project_code } = req.params;
+    const project = await Project.findById(project_code);
+    if (!project) {
+      return res.status(404).json({ error: `Project with project_code ${project_code} not found` });
+    }
+    res.json(project);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+// PUT /api/projects/:project_code - Update project by project_code
+router.put('/projects/:project_code', async (req, res) => {
+  try {
+    const { project_code } = req.params;
+    const { project_name, project_description } = req.body;
+    const project = await Project.findByIdAndUpdate(project_code, { project_name, project_description }, { new: true });
+    if (!project) {
+      return res.status(404).json({ error: `Project with project_code ${project_code} not found` });
+    }
+    res.json(project);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+// DELETE /api/projects/:project_code - Delete project by project_code
+router.delete('/projects/:project_code', async (req, res) => {
+  try {
+    const { project_code } = req.params;
+    const project = await Project.findByIdAndDelete(project_code);
+    if (!project) {
+      return res.status(404).json({ error: `Project with project_code ${project_code} not found` });
+    }
+    res.json({ message: `Project with project_code ${project_code} deleted` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
