@@ -19,6 +19,7 @@ router.post('/employees', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
 // GET /api/employees - List all employees
 router.get('/employees', async (req, res) => {
     try {
@@ -28,6 +29,7 @@ router.get('/employees', async (req, res) => {
       res.status(500).json({ error: err.message });
     }
 });
+
 // GET /api/employees/:employee_id - Get employee by employee_id
 router.get('/employees/:employee_id', async (req, res) => {
   try {
@@ -41,6 +43,7 @@ router.get('/employees/:employee_id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 // PUT /api/employees/:employee_id - Update employee by employee_id
 router.put('/employees/:employee_id', async (req, res) => {
   try {
@@ -55,6 +58,7 @@ router.put('/employees/:employee_id', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
 // DELETE /api/employees/:employee_id - Delete employee by employee_id
 router.delete('/employees/:employee_id', async (req, res) => {
   try {
@@ -68,6 +72,7 @@ router.delete('/employees/:employee_id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 // POST /api/projects - Add new project
 router.post('/projects', async (req, res) => {
     try {
@@ -93,6 +98,7 @@ router.get('/projects', async (req, res) => {
       res.status(500).json({ error: err.message });
     }
 });
+
 // GET /api/projects/:project_code - Get project by project_code
 router.get('/projects/:project_code', async (req, res) => {
   try {
@@ -106,6 +112,7 @@ router.get('/projects/:project_code', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 // PUT /api/projects/:project_code - Update project by project_code
 router.put('/projects/:project_code', async (req, res) => {
   try {
@@ -120,6 +127,7 @@ router.put('/projects/:project_code', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
 // DELETE /api/projects/:project_code - Delete project by project_code
 router.delete('/projects/:project_code', async (req, res) => {
   try {
@@ -156,3 +164,75 @@ router.post('/project-assignments', async (req, res) => {
       res.status(400).json({ error: err.message });
     }
 });
+
+// GET /api/project-assignments - List all assignments with populated data
+router.get('/project-assignments', async (req, res) => {
+    try {
+      const assignments = await ProjectAssignment.find()
+        .sort({ start_date: -1 }) // Sort by start_date in descending order
+        .limit(5); // Limit to latest 5 assignments
+  
+      // Manually populate employee_id and project_code
+      const populatedAssignments = await Promise.all(
+        assignments.map(async (assignment) => {
+          const employee = await Employee.findOne({ employee_id: assignment.employee_id });
+          const project = await Project.findOne({ project_code: assignment.project_code });
+          return {
+            ...assignment.toObject(),
+            employee_id: employee ? { employee_id: employee.employee_id, full_name: employee.full_name } : null,
+            project_code: project ? { project_code: project.project_code, project_name: project.project_name } : null,
+          };
+        })
+      );
+  
+      res.json(populatedAssignments);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+});
+
+// GET /api/project-assignments/:employee_id - Get assignments by employee_id
+router.get('/project-assignments/:employee_id', async (req, res) => {
+  try {
+    const { employee_id } = req.params;
+    const assignments = await ProjectAssignment.find({ employee_id });
+    if (assignments.length === 0) {
+      return res.status(404).json({ error: `No assignments found for employee_id ${employee_id}` });
+    }
+    res.json(assignments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PUT /api/project-assignments/:assignment_id - Update assignment by assignment_id
+router.put('/project-assignments/:assignment_id', async (req, res) => {
+  try {
+    const { assignment_id } = req.params;
+    const { employee_id, project_code, start_date } = req.body;
+    const assignment = await ProjectAssignment.findByIdAndUpdate(assignment_id, { employee_id, project_code, start_date }, { new: true });
+    if (!assignment) {
+      return res.status(404).json({ error: `Assignment with ID ${assignment_id} not found` });
+    }
+    res.json(assignment);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/project-assignments/:assignment_id - Delete assignment by assignment_id
+router.delete('/project-assignments/:assignment_id', async (req, res) => {
+  try {
+    const { assignment_id } = req.params;
+    const assignment = await ProjectAssignment.findByIdAndDelete(assignment_id);
+    if (!assignment) {
+      return res.status(404).json({ error: `Assignment with ID ${assignment_id} not found` });
+    }
+    res.json({ message: `Assignment with ID ${assignment_id} deleted` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+module.exports = router;
+  
