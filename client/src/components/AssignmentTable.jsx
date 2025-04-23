@@ -52,3 +52,48 @@ const AssignmentTable = () => {
 
     setAssignments(sortedAssignments);
   };
+  return (
+    <table className="assignment-table">
+      <thead>
+        <tr>
+          <th
+            className="table-header"
+            onClick={() => handleSort('employee_id')}
+          >
+            Employee ID {sortConfig.key === 'employee_id' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+          </th>
+          <th
+            className="table-header"
+            onClick={() => handleSort('employee_id')}
+          >
+            Employee Name {sortConfig.key === 'employee_id' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+          </th>
+          <th
+            className="table-header"
+            onClick={() => handleSort('project_code')}
+          >
+            Project Name {sortConfig.key === 'project_code' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+          </th>
+          <th
+            className="table-header"
+            onClick={() => handleSort('start_date')}
+          >
+            Start Date {sortConfig.key === 'start_date' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {assignments.map((assignment) => (
+          <tr key={assignment._id}>
+            <td className="table-cell">{assignment.employee_id.employee_id}</td>
+            <td className="table-cell">{assignment.employee_id.full_name}</td>
+            <td className="table-cell">{assignment.project_code.project_name}</td>
+            <td className="table-cell">{new Date(assignment.start_date).toLocaleDateString()}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export default AssignmentTable;
