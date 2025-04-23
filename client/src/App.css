@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+/* Optional: Basic styles for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  text-align: left;
+}

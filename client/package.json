@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "client",
   "private": true,
   "version": "0.0.0",
@@ -25,25 +24,5 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "vite": "^6.3.1"
-=======
-  "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "Ibrahim Olasunbo",
-  "type": "commonjs",
-  "main": "server.js",
-  "scripts": {
-    "start": "node --env-file=.env server.js",
-    "dev": "nodemon --env-file=.env server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "mongoose": "^8.13.2",
-    "nodemon": "^3.1.9",
-    "path": "^0.12.7"
->>>>>>> 637c5db6fcad6a5cab9e89862dd472c340d509c1
   }
 }
