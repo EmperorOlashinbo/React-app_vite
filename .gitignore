@@ -4,3 +4,4 @@ server/.env
 .vscode/
 client/node_modules/
 client/.env
+node_modules/
