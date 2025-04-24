@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// AssignmentTable component to display project assignments
+// It fetches data from the backend and allows sorting by employee ID, project name, and start date
 const AssignmentTable = () => {
-  const [assignments, setAssignments] = useState([]);
+  const [assignments, setAssignments] = useState([]); // State to hold assignments data
   const [sortConfig, setSortConfig] = useState({ key: 'start_date', direction: 'desc' });
 
   // Fetch assignments from backend
   const fetchAssignments = async () => {
     try {
-      const response = await axios.get('/api/project-assignments');
-      setAssignments(response.data);
+      const response = await axios.get('/api/project-assignments'); // Adjust the URL as needed
+      setAssignments(response.data); // Set the assignments state with the fetched data
     } catch (err) {
       console.error('Error fetching assignments:', err);
     }
@@ -34,6 +36,7 @@ const AssignmentTable = () => {
       let aValue = a[key];
       let bValue = b[key];
 
+        // Handle nested properties for employee_id and project_code
       if (key === 'employee_id') {
         aValue = a.employee_id.full_name;
         bValue = b.employee_id.full_name;
@@ -45,6 +48,7 @@ const AssignmentTable = () => {
         bValue = new Date(b.start_date);
       }
 
+        // Handle sorting for different data types
       if (aValue < bValue) return direction === 'asc' ? -1 : 1;
       if (aValue > bValue) return direction === 'asc' ? 1 : -1;
       return 0;
@@ -52,6 +56,8 @@ const AssignmentTable = () => {
 
     setAssignments(sortedAssignments);
   };
+  // Render the table with sortable columns
+  // The table displays employee ID, employee name, project name, and start date
   return (
     <table className="assignment-table">
       <thead>
