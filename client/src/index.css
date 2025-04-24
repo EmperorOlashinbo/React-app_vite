@@ -81,3 +81,77 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 20px;
+}
+th, td {
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+th {
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+}
+th:hover {
+  background-color: var(--primary-hover-color);
+}
+
+/* Containers */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  gap: 16px;
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  flex: 1 1 calc(33.333% - 16px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 8px;
+  }
+  .card {
+    flex: 1 1 100%;
+  }
+}
+
+/* Light Theme */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: var(--secondary-color);
+    background-color: var(--background-light);
+  }
+  a:hover {
+    color: var(--primary-hover-color);
+  }
+  button {
+    background-color: var(--background-light);
+    color: var(--secondary-color);
+  }
+  th {
+    background-color: var(--primary-hover-color);
+  }
+}
