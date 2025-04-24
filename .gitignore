@@ -4,4 +4,10 @@ server/.env
 .vscode/
 client/node_modules/
 client/.env
+client/build/
+client/dist/
+client/public/build/
 node_modules/
+.env
+package-lock.json
+package.json

@@ -5,6 +5,7 @@ import axios from 'axios';
 // It fetches data from the backend and allows sorting by employee ID, project name, and start date
 const AssignmentTable = () => {
   const [assignments, setAssignments] = useState([]); // State to hold assignments data
+    // State to hold sorting configuration
   const [sortConfig, setSortConfig] = useState({ key: 'start_date', direction: 'desc' });
 
   // Fetch assignments from backend
