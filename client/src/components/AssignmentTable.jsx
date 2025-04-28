@@ -11,7 +11,7 @@ const AssignmentTable = () => {
   // Fetch assignments from backend
   const fetchAssignments = async () => {
     try {
-      const response = await axios.get('/api/project-assignments'); // Adjust the URL as needed
+      const response = await axios.get('/api/project-assignments'); // API endpoint to fetch assignments
       setAssignments(response.data); // Set the assignments state with the fetched data
     } catch (err) {
       console.error('Error fetching assignments:', err);
@@ -20,7 +20,7 @@ const AssignmentTable = () => {
   // Initial fetch and auto-refresh every minute
   useEffect(() => {
     fetchAssignments();
-    const interval = setInterval(fetchAssignments, 60000); // Refresh every 60 seconds
+    const interval = setInterval(fetchAssignments, 3000); // Refresh every 3 seconds
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
 
@@ -50,8 +50,8 @@ const AssignmentTable = () => {
       }
 
         // Handle sorting for different data types
-      if (aValue < bValue) return direction === 'asc' ? -1 : 1;
-      if (aValue > bValue) return direction === 'asc' ? 1 : -1;
+      if (aValue < bValue) return direction === 'asc' ? -1 : 1; 
+      if (aValue > bValue) return direction === 'asc' ? 1 : -1; 
       return 0;
     });
 
