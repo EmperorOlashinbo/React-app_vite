@@ -44,21 +44,6 @@ router.get('/employees/:employee_id', async (req, res) => {
   }
 });
 
-// PUT /api/employees/:employee_id - Update employee by employee_id
-router.put('/employees/:employee_id', async (req, res) => {
-  try {
-    const { employee_id } = req.params;
-    const { full_name, email, hashed_password } = req.body;
-    const employee = await Employee.findByIdAndUpdate(employee_id, { full_name, email, hashed_password }, { new: true });
-    if (!employee) {
-      return res.status(404).json({ error: `Employee with employee_id ${employee_id} not found` });
-    }
-    res.json(employee);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
 // DELETE /api/employees/:employee_id - Delete employee by employee_id
 router.delete('/employees/:employee_id', async (req, res) => {
   try {

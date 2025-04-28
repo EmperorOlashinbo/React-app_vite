@@ -7,15 +7,15 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '../client/dist')));
-
 // Connect to MongoDB using Mongoose
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
+
+// Middleware to parse JSON requests and serve static files
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Routes
 app.use('/api', require('./routes/api'));
